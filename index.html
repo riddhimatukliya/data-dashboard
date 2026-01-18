@@ -46,11 +46,11 @@
             font-weight:normal;
         }
 
-        #pagination {
+        #page{
             margin-top:10px;
         }
 
-        #pagination button {
+        #page button {
             margin-right: 5px;
         }
     </style>
@@ -59,8 +59,8 @@
 
 <h1>User Data Dashboard</h1>
 
-<input type="text" id="searchInput" placeholder="Search by name">
-<button id="sortBtn">Sort A → Z</button>
+<input type="text" id="inputs" placeholder="Search by name">
+<button id="sortbt">Sort A → Z</button>
 
 <p id="status"></p>
 
@@ -72,54 +72,54 @@
             <th>rollno</th>
         </tr>
     </thead>
-    <tbody id="tableBody"></tbody>
+    <tbody id="body"></tbody>
 </table>
 
-<div id="pagination"></div>
+<div id="page"></div>
 
 <script>
-    const tableBody = document.getElementById("tableBody");
-    const statusText = document.getElementById("status");
-    const searchInput = document.getElementById("searchInput");
-    const sortBtn = document.getElementById("sortBtn");
-    const paginationDiv = document.getElementById("pagination");
+    const body = document.getElementById("body");
+    const text = document.getElementById("status");
+    const inputs = document.getElementById("inputs");
+    const sortbt = document.getElementById("sortbt");
+    const pdiv = document.getElementById("page");
 
     let users = [];
     let page = 1;
     const rows = 5;
     let sorted = false;
 
-    async function fetchUsers() {
-        statusText.innerText = "Loading data...";
+    async function fetchu() {
+        text.innerText = "Loading data...";
 
         try {
             const response = await fetch("https://api.github.com");
 
             if (!response.ok) {
-                throw new Error("API Error");
+                throw new Error("API error");
             }
 
             users = await response.json();
-            statusText.innerText = "";
-            renderTable();
+            text.innerText = "";
+            rt();
 
         } catch (error) {
-            statusText.innerText = "Error loading data ❌";
+            text.innerText = "Error loading data ❌";
         }
     }
 
-    function renderTable() {
-        tableBody.innerHTML = "";
+    function rt() {
+        body.innerHTML = "";
 
-        let filteredUser = users.filter(user =>
-            user.name.toLowerCase().includes(searchInput.value.toLowerCase())
+        let fuser = users.filter(user =>
+            user.name.toLowerCase().includes(inputs.value.toLowerCase())
         );
 
         const start = (page - 1) * rows;
         const end = start + rows;
-        const paginatedUsers = filteredUser.slice(start, end);
+        const pusers = fuser.slice(start, end);
 
-        paginatedUsers.forEach(user => {
+        pusers.forEach(user => {
             const row = document.createElement("tr");
 
             row.innerHTML = `
@@ -128,35 +128,35 @@
                 <td>${user.rollno}</td>
             `;
 
-            tableBody.appendChild(row);
+            body.appendChild(row);
         });
 
-        renderPagination(filteredUser.length);
+        pg(fuser.length);
     }
 
-    function renderPagination(totalItems) {
-        paginationDiv.innerHTML = "";
-        const totalPages = Math.ceil(totalItems / rows);
+    function pg(totalItems) {
+        pdiv.innerHTML = "";
+        const totalpage = Math.ceil(totalItems / rows);
 
-        for (let i = 0; i < totalPages; i++) {
+        for (let i = 0; i < totalpage; i++) {
             const btn = document.createElement("button");
             btn.innerText = i;
 
             btn.onclick = () => {
                 page = i;
-                renderTable();
+                rt();
             };
 
-            paginationDiv.appendChild(btn);
+            pdiv.appendChild(btn);
         }
     }
 
-    searchInput.addEventListener("input", () => {
+    input.addEventListener("input", () => {
         page = 1;
-        renderTable();
+        rt();
     });
 
-    sortBtn.addEventListener("click", () => {
+    sortbt.addEventListener("click", () => {
         sorted = !sorted;
 
         users.sort((a, b) => {
@@ -165,11 +165,11 @@
                 : b.name.localeCompare(a.name);
         });
 
-        sortBtn.innerText = sorted ? "Sort Z → A" : "Sort A → Z";
-        renderTable();
+        sortbt.innerText = sorted ? "Sort Z → A" : "Sort A → Z";
+        rt();
     });
 
-    fetchUsers();
+    fetchu();
 </script>
 
 </body>
