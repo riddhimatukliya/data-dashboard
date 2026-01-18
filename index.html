@@ -7,28 +7,28 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            padding: 20px;
+            padding:20px;
         }
 
         h1 {
-            margin-bottom: 10px;
+            margin-bottom:10px;
         }
 
         input {
-            padding: 8px;
-            width: 220px;
+            padding:8px;
+            width:220px;
         }
 
         button {
             padding: 8px 12px;
-            margin-left: 10px;
-            cursor: pointer;
+            margin-left:10px;
+            cursor:pointer;
         }
 
         table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
+            width:100%;
+            border-collapse:collapse;
+            margin-top:10px;
         }
 
         th, td {
@@ -38,16 +38,16 @@
         }
 
         th {
-            background-color: #f4f4f4;
+            background-color: #ffffff;
         }
 
         #status {
-            margin-top: 10px;
-            font-weight: bold;
+            margin-top:10px;
+            font-weight:normal;
         }
 
         #pagination {
-            margin-top: 15px;
+            margin-top:10px;
         }
 
         #pagination button {
@@ -69,7 +69,7 @@
         <tr>
             <th>Name</th>
             <th>Email</th>
-            <th>City</th>
+            <th>rollno</th>
         </tr>
     </thead>
     <tbody id="tableBody"></tbody>
@@ -84,10 +84,10 @@
     const sortBtn = document.getElementById("sortBtn");
     const paginationDiv = document.getElementById("pagination");
 
-    let user = [];
+    let users = [];
     let page = 1;
     const rows = 5;
-    let isSorted = false;
+    let sorted = false;
 
     async function fetchUsers() {
         statusText.innerText = "Loading data...";
@@ -125,7 +125,7 @@
             row.innerHTML = `
                 <td>${user.name}</td>
                 <td>${user.email}</td>
-                <td>${user.address.city}</td>
+                <td>${user.rollno}</td>
             `;
 
             tableBody.appendChild(row);
@@ -138,7 +138,7 @@
         paginationDiv.innerHTML = "";
         const totalPages = Math.ceil(totalItems / rows);
 
-        for (let i = 1; i <= totalPages; i++) {
+        for (let i = 0; i < totalPages; i++) {
             const btn = document.createElement("button");
             btn.innerText = i;
 
@@ -157,15 +157,15 @@
     });
 
     sortBtn.addEventListener("click", () => {
-        isSorted = !isSorted;
+        sorted = !sorted;
 
         users.sort((a, b) => {
-            return isSorted
+            return sorted
                 ? a.name.localeCompare(b.name)
                 : b.name.localeCompare(a.name);
         });
 
-        sortBtn.innerText = isSorted ? "Sort Z → A" : "Sort A → Z";
+        sortBtn.innerText = sorted ? "Sort Z → A" : "Sort A → Z";
         renderTable();
     });
 
