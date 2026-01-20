@@ -99,7 +99,7 @@
                 throw new Error("API error");
             }
 
-            users = await response.json();
+            users = await response;
             text.innerText = "";
             rt();
 
